@@ -1,0 +1,33 @@
+name: ProvChart README Charts
+description: Generate ProvChart SVG charts via API and write them into the repo for README/docs embeds.
+author: DevTemple
+
+branding:
+  icon: bar-chart-2
+  color: purple
+
+inputs:
+  api-key:
+    description: ProvChart API key (X-API-Key). Prefer secrets.PROVCHART_API_KEY.
+    required: true
+  config:
+    description: Path to JSON config file (single chart or array of charts).
+    required: true
+    default: .provchart/charts.json
+  output-dir:
+    description: Directory to write .svg files into.
+    required: false
+    default: docs/charts
+  api-base:
+    description: ProvChart API base URL.
+    required: false
+    default: https://provchart-api.devtem.org
+
+outputs:
+  files:
+    description: Newline-separated list of written SVG paths.
+    value: ${{ steps.generate.outputs.files }}
+
+runs:
+  using: node20
+  main: src/main.js
