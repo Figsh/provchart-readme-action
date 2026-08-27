@@ -1,0 +1,8 @@
+{
+  "name": "provchart-readme-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action — generate ProvChart SVGs for README/docs",
+  "type": "module",
+  "license": "MIT"
+}
