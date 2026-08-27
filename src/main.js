@@ -47,6 +47,7 @@ async function generateSvg(payload) {
     headers: {
       "Content-Type": "application/json",
       "X-API-Key": apiKey,
+      "User-Agent": "ProvChartAction/1.0 (GitHubActions; DevTemple)",
     },
     body: JSON.stringify(payload),
   });
