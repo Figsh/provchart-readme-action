@@ -1,10 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const apiKey =
+const apiKey = (
   process.env.INPUT_API_KEY ||
   process.env.PROVCHART_API_KEY ||
-  "";
+  ""
+).trim();
+
 const configPath = process.env.INPUT_CONFIG || ".provchart/charts.json";
 const outputDir = process.env.INPUT_OUTPUT_DIR || "docs/charts";
 const apiBase = (
@@ -40,7 +42,6 @@ function slug(name, fallback) {
 }
 
 async function generateSvg(payload) {
-async function generateSvg(payload) {
   const res = await fetch(`${apiBase}/api/v1/generate-svg`, {
     method: "POST",
     headers: {
@@ -67,9 +68,13 @@ async function generateSvg(payload) {
       "(empty body)";
     throw new Error(`HTTP ${res.status} — ${detail}`);
   }
+
   if (!data.svg) {
-    throw new Error(`HTTP ${res.status} — no svg in response: ${text.slice(0, 300)}`);
+    throw new Error(
+      `HTTP ${res.status} — no svg in response: ${text.slice(0, 300)}`
+    );
   }
+
   return data.svg;
 }
 
@@ -83,15 +88,17 @@ async function main() {
 
   for (let i = 0; i < configs.length; i++) {
     const entry = configs[i];
-    // Allow { file, ...payload } or pure payload + auto name
     const { file, filename, ...payload } = entry;
     const outName =
       file ||
       filename ||
       `${slug(payload.type, "chart")}-${i + 1}.svg`;
-    const outPath = path.join(outputDir, outName.endsWith(".svg") ? outName : `${outName}.svg`);
+    const outPath = path.join(
+      outputDir,
+      outName.endsWith(".svg") ? outName : `${outName}.svg`
+    );
 
-    console.log(`Generating ${outPath} ( ${payload.type || "chart"})…`);
+    console.log(`Generating ${outPath} (${payload.type || "chart"})…`);
     try {
       const svg = await generateSvg(payload);
       fs.writeFileSync(outPath, svg, "utf8");
