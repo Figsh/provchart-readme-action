@@ -1,2 +1,15 @@
-# provchart-readme-action
-CI generates SVG charts and commits them for README/docs
+# ProvChart README Action
+
+Generate [ProvChart](https://chart.devtem.org) **SVG** charts in GitHub Actions and commit them for README/docs.
+
+```yaml
+- uses: fscss-ttr/provchart-readme-action@v1
+  with:
+    api-key: ${{ secrets.PROVCHART_API_KEY }}
+    config: .provchart/charts.json
+    output-dir: docs/charts
+```
+
+Config entries = ProvChart `generate-svg` payloads plus optional `"file": "name.svg"`.
+
+MIT · [chart.devtem.org](https://chart.devtem.org)
