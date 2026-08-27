@@ -40,6 +40,7 @@ function slug(name, fallback) {
 }
 
 async function generateSvg(payload) {
+async function generateSvg(payload) {
   const res = await fetch(`${apiBase}/api/v1/generate-svg`, {
     method: "POST",
     headers: {
@@ -48,11 +49,27 @@ async function generateSvg(payload) {
     },
     body: JSON.stringify(payload),
   });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || data.success === false) {
-    throw new Error(data.error || data.code || `HTTP ${res.status}`);
+
+  const text = await res.text();
+  let data = {};
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = {};
   }
-  if (!data.svg) throw new Error("No svg in response");
+
+  if (!res.ok || data.success === false) {
+    const detail =
+      data.error ||
+      data.code ||
+      data.message ||
+      text.slice(0, 400) ||
+      "(empty body)";
+    throw new Error(`HTTP ${res.status} — ${detail}`);
+  }
+  if (!data.svg) {
+    throw new Error(`HTTP ${res.status} — no svg in response: ${text.slice(0, 300)}`);
+  }
   return data.svg;
 }
 
