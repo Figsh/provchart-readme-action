@@ -29,5 +29,5 @@ outputs:
     value: ${{ steps.generate.outputs.files }}
 
 runs:
-  using: node20
+  using: node24
   main: src/main.js
