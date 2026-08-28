@@ -20,9 +20,9 @@ function fail(msg) {
 
 function setOutput(name, value) {
   const out = process.env.GITHUB_OUTPUT;
-  if (out) {
-    fs.appendFileSync(out, `${name}=${value}\n`);
-  }
+  if (!out) return;
+  const delim = `EOF_${Math.random().toString(36).slice(2)}`;
+  fs.appendFileSync(out, `${name}<<${delim}\n$value}\n${delim}\n`);
 }
 
 function loadConfigs(file) {
