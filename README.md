@@ -170,4 +170,3 @@ Use the latest release tag from the action repo if newer than `v1.0.4`.
 ## License
 
 MIT
-```
