@@ -50,7 +50,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Generate SVGs
-        uses: fscss-ttr/provchart-readme-action@1.0.3
+        uses: fscss-ttr/provchart-readme-action@v1.0.3
         with:
           api-key: ${{ secrets.PROVCHART_API_KEY }}
           config: .provchart/charts.json
