@@ -89,8 +89,6 @@ on:
       - ".provchart/**"
       - ".github/workflows/charts.yml"
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 6 * * 1"
 
 permissions:
   contents: write
@@ -101,12 +99,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check secret
+        env:
+          KEY: ${{ secrets.PROVCHART_API_KEY }}
+        run: |
+          if [ -z "$KEY" ]; then
+            echo "::error::PROVCHART_API_KEY is empty. Add it under Settings → Secrets → Actions (repository secret)."
+            exit 1
+          fi
+          echo "Secret OK (length ${#KEY})"
+
       - name: Generate SVGs
         uses: fscss-ttr/provchart-readme-action@v1.0.4
         with:
           api-key: ${{ secrets.PROVCHART_API_KEY }}
           config: .provchart/charts.json
           output-dir: docs/charts
+        env:
+          # belt-and-suspenders — main.js also reads this
+          PROVCHART_API_KEY: ${{ secrets.PROVCHART_API_KEY }}
 
       - name: Commit generated charts
         uses: stefanzweifel/git-auto-commit-action@v5
